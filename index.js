@@ -38,6 +38,23 @@ const {
 // const code = `const hasValue = value => Boolean(value) || value === 0
 // export default hasValue`;
 
+// _universalEnv.isWeex ObjectProperty 的用法目前仍然不能 dce
+const code = `var _requireEsm = require("../../../require-esm/index.js");
+
+var _rxpiEnv = {
+  isWeb: false,
+  isMiniApp: true,
+  isWechat: false,
+  isWechatMiniProgram: false,
+  // ...
+};
+var exp = _rxpiEnv.isMiniApp
+  ? (0, _requireEsm["default"])(require("./miniapp/index"))
+  : _rxpiEnv.isWeChatMiniProgram && !_rxpiEnv.isWeChatMiniProgramH5
+  ? (0, _requireEsm["default"])(require("./wechat-miniprogram/index"))
+  : (0, _requireEsm["default"])(require("./weex/index"));
+
+exports["default"]  = exp;`;
 
 console.log(`> babel/minify`);
 console.log(
